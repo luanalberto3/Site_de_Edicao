@@ -1,0 +1,52 @@
+CREATE TABLE Usuario (
+    ID INT PRIMARY KEY,
+    Email VARCHAR(255) NOT NULL,
+    Senha VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Imagem (
+    ID INT PRIMARY KEY,
+    Caminho VARCHAR(255) NOT NULL,
+    UsuarioID INT,
+    FOREIGN KEY (UsuarioID) REFERENCES Usuario(ID)
+);
+
+CREATE TABLE Filtro (
+    ID INT PRIMARY KEY,
+    Nome VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Operacao (
+    ID INT PRIMARY KEY,
+    Nome VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE MarcaDagua (
+    ID INT PRIMARY KEY,
+    Texto VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE TextoIdentificado (
+    ID INT PRIMARY KEY,
+    Texto VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE AjusteTamanho (
+    ID INT PRIMARY KEY,
+    Tipo ENUM('Aumentar', 'Diminuir') NOT NULL,
+    Percentual FLOAT NOT NULL
+);
+
+CREATE TABLE Processamento (
+    ID INT PRIMARY KEY,
+    ImagemID INT,
+    Tipo ENUM('Filtro', 'Operacao', 'MarcaDagua', 'TextoIdentificado', 'AjusteTamanho') NOT NULL,
+    TipoID INT,
+    DataProcessamento DATETIME NOT NULL,
+    FOREIGN KEY (ImagemID) REFERENCES Imagem(ID),
+    FOREIGN KEY (TipoID) REFERENCES Filtro(ID) ON DELETE CASCADE,
+    FOREIGN KEY (TipoID) REFERENCES Operacao(ID) ON DELETE CASCADE,
+    FOREIGN KEY (TipoID) REFERENCES MarcaDagua(ID) ON DELETE CASCADE,
+    FOREIGN KEY (TipoID) REFERENCES TextoIdentificado(ID) ON DELETE CASCADE,
+    FOREIGN KEY (TipoID) REFERENCES AjusteTamanho(ID) ON DELETE CASCADE
+);
